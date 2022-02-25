@@ -1,0 +1,28 @@
+{% extends "admin/change_list.html" %} {% load i18n admin_urls static admin_list %}
+
+
+{% block object-tools %}
+
+<ul class="object-tools">
+  <li>
+    <input type="date" id="payslip-date" style='border: 0px; border-radius: 10px; margin-left:10px; backgroud-color:white;'>
+    <a id="date-a" href="/payslip/payslip/empty_payslips/" class="addlink">
+      create payslip for
+    </a>
+  </li>
+  
+  {% include "admin/import_export/change_list_import_item.html" %}
+  {% include "admin/import_export/change_list_export_item.html" %}
+</ul>
+
+<script>
+  document.querySelector("#payslip-date").onchange = function(event){
+    console.log(typeof event.target.value)
+    const date = event.target.value
+    const year = date.split('-')[0]
+    const month = date.split('-')[1]
+    document.querySelector("#date-a").href = `/payslip/payslip/empty_payslips/?year=${year}&month=${month}`
+    
+  }
+</script>
+{% endblock %}

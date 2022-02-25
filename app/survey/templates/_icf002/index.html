@@ -1,0 +1,144 @@
+{% extends '_icf001/base.html'%}
+
+{% block title %} form {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- Page content -->
+    <div class="container mt--8 pb-5">
+      <div class="row justify-content-center">
+        <div class="col w-300">
+          <div class="card bg-secondary shadow border-0">
+            <div class="card-header bg-transparent pb-2">
+              <div class="text-center mt-3">
+                <h2>TEST</h2>
+              </div>
+            </div>
+            <div class="card-body px-lg-5 py-lg-5">
+              <div class="text-center mb-4">
+
+                TESt
+
+              </div>
+
+              <form class="container mt-3" method="POST">
+
+                {% csrf_token %}
+
+                {% for f in form %}
+                <div class="row mb-1">
+                  {% if f.label != 'Time'%}
+                  {{f.label}} 
+                  {% endif %}
+                  </div>
+                  <div class="row mb-2">
+                  {{f}}
+                  </div>
+                  {% if f.errors %}
+                    <div class="row alert alert-warning" role="alert">
+                    {{ f.errors }}
+                    </div>
+                  {% endif %}
+                {% endfor %}
+                    <div class="nav-wrapper">
+                      <ul class="nav nav-pills nav-fill " id="tabs-icons-text" role="tablist">
+                          <li class="nav-item m-1">
+                              <a class="nav-link mb-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-paggi" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true">Paggi</a>
+                          </li>
+                          <li class="nav-item m-1">
+                              <a class="nav-link mb-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-siang" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false">Siang</a>
+                          </li>
+                          <li class="nav-item m-1">
+                              <a class="nav-link mb-0" id="tabs-icons-text-3-tab" data-toggle="tab" href="#tabs-sore" role="tab" aria-controls="tabs-icons-text-3" aria-selected="false">Sore</a>
+                          </li>
+                      </ul>
+                  </div>
+                  <div class="card shadow">
+                      <div class="card-body">
+                          <div class="tab-content" id="myTabContent">
+                              <div class="tab-pane fade show active" id="tabs-paggi" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
+                                <div class="btn-group-toggle d-inline m-2 mb-2" data-toggle="buttons">
+
+                                </div>
+                              </div>
+                              <div class="tab-pane fade" id="tabs-siang" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
+                                  <div class="btn-group-toggle d-inline m-2 mb-2" data-toggle="buttons">
+
+                                </div>
+                              </div>
+                              <div class="tab-pane fade" id="tabs-sore" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
+                                <div class="btn-group-toggle d-inline m-2 mb-2" data-toggle="buttons">
+
+                                </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary my-4">Submit</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+$(document).ready(function(){
+
+  // 버튼을 랜더링
+
+    function buttonTemplate(time){
+      return `
+        <label class="btn btn-secondary">
+          <input type="radio" name="options" id="option_${time}" autocomplete="off"><span>${time}</span>
+        </label>
+      `
+    }
+
+    function updateScheduleButton(obj){
+      $(".btn-group-toggle.d-inline.m-2.mb-2")[0].innerHTML = obj["paggi"].map(time => buttonTemplate(time)).join("")
+      $(".btn-group-toggle.d-inline.m-2.mb-2")[1].innerHTML = obj["siang"].map(time => buttonTemplate(time)).join("")
+      $(".btn-group-toggle.d-inline.m-2.mb-2")[2].innerHTML = obj["sore"].map(time => buttonTemplate(time)).join("")
+    }
+    init_schedule={
+      "paggi":['10:00','11:30'],
+      "siang":['13:00','13:30','14:00'],
+      "sore":['19:00','19:30']
+    }
+    updateScheduleButton(init_schedule)
+
+
+    //버튼에서 폼 데이터를 업데이트
+    $(".btn.btn-secondary").on("click", function(){   
+      $("#id_time")[0].value = this.childNodes[2].childNodes[0].textContent
+    })
+
+
+
+    // 서비스 폼 변화 감지 및 현재 상태 출력
+    $("#id_service").on("change", function () {
+      let index = this.selectedIndex
+      console.log("Service:",index)    
+    });
+
+    // 날짜 폼 변화 감지 및 현재 상태 출력
+    $("#id_date").on("change", function () {
+      let date = this.value
+      let day = new Date(date).getDay()
+      console.log("Date:",day) 
+    });
+
+});
+</script>
+{% endblock javascripts %}

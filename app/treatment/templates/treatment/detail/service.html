@@ -1,0 +1,200 @@
+{% load humanize %}
+          
+    <h3> SERVICE </h3>
+
+    <div id="service-container" class="container mt-3">
+    
+        <div class="row fluid row-cols-1 row-cols-md-3">
+            <div class="col col-md-4 ">
+                <div class="form-group">
+                <div class="input-group input-group-alternative">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Code</span>
+                    </div>
+                {{filter.form.code}}
+                </div>
+                </div>
+            </div>
+            <div class="col col-md-6">
+                <div class="form-group">
+                    <div class="input-group input-group-alternative">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Name</span>
+                        </div>
+                    {{filter.form.name}}
+                    </div>
+                </div>
+            </div>
+        
+            <div id="service-search-btn" class="col col-md-2 text-left">
+                <button  class="btn btn-bm btn-neutral btn-block" type='submit'> <i class="fas fa-search"></i></button>  
+            </div>
+
+        </div>
+        <div id ="service-content-window" class="p-3 overflow-auto" style="height: 200px;" >
+            
+        
+        </div>
+
+        <div class="row row-cols-md-3">
+
+            <div class='col-6 col-md-4'>
+                <div class="form-group">
+                    <div class="input-group input-group-alternative mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">{{form.teeth.label}}</span>
+                        </div>
+                    {{form.teeth }}
+                    </div>
+                </div>
+                
+
+            
+                {% if form.teeth.errors %}
+                <div class="alert alert-warning" role="alert">
+                {{ form.teeth.errors }}
+                </div>
+                {% endif %} 
+                
+            </div>   
+        
+            <div class="col-6 col-md-4">
+                <div class="form-group">
+                    <div class="input-group input-group-alternative mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">{{form.quantity.label}}</span>
+                    </div>
+                    {{ form.quantity }}
+                    </div>
+                </div>
+
+                
+                {% if form.quantity.errors %}
+                <div class="alert alert-warning" role="alert">
+                {{ form.quantity.errors }}
+                </div>
+                {% endif %}
+                
+            
+            </div>
+            <div class="col col-md-4">
+                <div class="text-center">
+                    <button id="service-post" type="submit" class="btn btn-primary btn-block p-1" ><i class="ni ni-fat-add display-4"></i></button>
+                </div>
+            </div>
+        </div>
+    
+    </div>
+    
+    <div class="table-responsive description mt-2">
+        <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+                <tr>
+                <th scope="col" class="sort" data-sort="teeth">Teeth</th>
+                <th scope="col" class="sort" data-sort="service">Service Name</th>
+                <th scope="col" class="sort" data-sort="quantity">Quantity</th>
+                <th scope="col" class="sort" data-sort="pirce">Pirce</th>
+                <th scope="col" class="sort" data-sort="actions">actions</th>
+                </tr>
+            </thead>
+            <tbody id="product-list" class="list">
+
+            {% for product in context.pd_set %}
+
+                <tr id="product-row-{{ product.pd.uuid }}">
+                <td >
+                    <div class="media align-items-center">
+                    <div class="media-body">
+                        <span class="service mb-0 text-sm">{{product.pd.teeth}}</span>
+                    </div>
+                    </div>
+                </td>
+                <td >
+                    <div class="media align-items-center">
+                    <div class="media-body">
+                        <span class="service mb-0 text-sm">{{product.service}}</span>
+                    </div>
+                    </div>
+                </td>
+                <td >
+                    <div class="media align-items-center">
+                    <div class="media-body">
+                        <span id="quantity-{{ product.pd.uuid }}" class="quantity mb-0 text-sm">{{product.pd.quantity}}</span>
+                    </div>
+                    </div>
+                </td>
+                <td >
+                    <div class="media align-items-center">
+                    <div class="media-body">
+                        <span id="price-{{ product.pd.uuid }}" class="quantity mb-0 text-sm">{{product.price | intcomma}}</span>
+                    </div>
+                    </div>
+                </td>
+
+                <td class="actions">
+                    <a id="product-detele-btn-{{product.pd.uuid}}" class="btn btn-sm btn-neutral product-delete-btn">delete</a>                                    
+                </td>
+            
+                </tr>
+                {% endfor %}
+                </tbody>
+        </table>
+
+        <div class="text-left", style='padding:20px'>
+                <h4>Total amount : <span id="total-amount">{{context.total|intcomma}}</span> IDR</h4>
+        </div>
+    </div>
+
+
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="container">
+            <div class="row" style="margin-top:15px">
+                
+                <div class="col">
+                    <div class="form-group">
+                        <h3> Diagnosis</h3>
+                        <div class="input-group input-group-alternative mb-3">
+                        {{ tr_form.diagnosis }}
+                    </div>
+                    </div>
+
+                    
+                    {% if tr_form.next_treatement.errors %}
+                    <div class="alert alert-warning" role="alert">
+                    {{ tr_form.next_treatement.errors }}
+                    </div>
+                    {% endif %}
+                    
+                </div>
+            </div>
+
+            <div class="row" style="margin-top:10px">
+                
+                <div class="col">
+                    <div class="form-group">
+                    <h3> Next Treatment</h3>
+                        <div class="input-group input-group-alternative mb-3">
+                        
+                            
+                        </div>
+                        {{ tr_form.next_treatement }}
+                        </div>
+                    </div>
+
+                    
+                    {% if tr_form.next_treatement.errors %}
+                    <div class="alert alert-warning" role="alert">
+                    {{ tr_form.next_treatement.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        <div class="text-center mb-100">
+            <button type="submit" class="btn btn-outline-info btn-block" >CONFRIM TREATMENT</button>
+        </div> 
+        </div>
+    </form>
+        

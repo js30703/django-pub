@@ -1,0 +1,330 @@
+{% extends 'treatment/list.html' %}
+{% load humanize %}
+{% block title %} Treatment detail {% endblock title %}
+
+{% block content %}
+
+
+    <div class="header bg-primary pb-6">
+        <div class="container-fluid">
+        <div class="header-body">
+            <div class="row align-items-center py-4">
+            <div class="col-lg-6 col-7">
+                <h6 class="h2 text-white d-inline-block mb-0">Treatment</h6>
+                <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                    <li class="breadcrumb-item"><a href=""><i class="fas fa-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/patient/">Treatment List</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"> Treatment Info </li>
+                </ol>
+                </nav>
+            </div>
+
+            </div>
+        </div>
+        </div>
+    </div>
+
+
+    
+    <div class="container-fluid mt--6">
+        <!-- Page content -->
+        <div class="container mt-4 pb-2">
+        <!-- Table -->
+            <div class="row justify-content-center">
+                <div class="col" style="max-width: 1400px !important;">
+                    <div class="card bg-secondary shadow border-0" >
+                        <div class="card-header bg-transparent pb-1">
+                            <div class="text-muted text-center mt-2 mb-1">
+                                <p class="display-3"> Treatment Info</p>
+                            </div>
+                        </div>
+                        <div class="card-body px-4 py-4" >
+                                <h3> ABOUT </h3>
+
+                                <div class="nav-wrapper">
+                                    <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="ni ni-book-bookmark mr-2"></i>Patient</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab" data-toggle="tab" href="#tabs-icons-text-3" role="tab" aria-controls="tabs-icons-text-3" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Odontogram</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-4-tab" data-toggle="tab" href="#tabs-icons-text-4" role="tab" aria-controls="tabs-icons-text-4" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Today's service</a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="card shadow">
+                                    <div class="card-body">
+                                        <div class="tab-content" id="myTabContent">
+                                            <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
+                                                
+                                                    
+                                                    <h3 class = "mt-2 ml-1"> Reservations </h3>
+                                                    <div class="row" style="padding:10px">
+                                                        <div class="col-3">
+                                                            <span>DOCTOR</span>
+                                                        </div>
+                                                        <div class="col">
+                                                            <span>{{context.user.name}}</span>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="row" style="padding:10px">
+                                                        
+                                                        <div class="col-3">
+                                                            <span>PATIENT</span>
+                                                        </div>
+                                                        <div class="col">
+                                                            <span>{{context.patient.name}}</span>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="row" style="padding:10px">
+                                                        
+                                                        <div class="col-3">
+                                                            <span>TIME</span>
+                                                        </div>
+                                                        <div class="col">
+                                                            <span>{{context.treatment.treatment_time}}</span>
+                                                        </div>
+                                                    </div>
+
+                                                
+                                                <h3 class = "mt-4 ml-1"> Medical Record </h3>
+                                                
+                                                    <div class="row" style="padding:10px">
+                                                        <div class="col-3"> DATE </div>
+                                                        <div class="col-3"> Teeth </div>
+                                                        <div class="col-3"> Diagnosis </div>
+                                                    </div>
+                                                {% for i in medical_record%}
+                                                    <div class="row" style="padding:10px">
+                                                        <div class="col-3"> {{i.treatment__treatment_time.date}} </div>
+                                                        <div class="col-3"> {{i.teeth}} </div>
+                                                        <div class="col-3"> {{i.diagnosis}} </div>
+                                                    </div>
+                                                {% endfor %}
+
+                                                
+                                            </div>
+
+                                            <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
+                                                {% include "./odontogram.html" %}
+                                            </div>
+
+                                            <div class="tab-pane fade" id="tabs-icons-text-4" role="tabpanel" aria-labelledby="tabs-icons-text-4-tab">
+                                                {% include "./service.html" %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                        
+                        </div>        
+                    </div> 
+                </div>
+
+            </div> 
+            
+            
+       
+       </div>
+    </div>
+    
+    
+            
+                    
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+
+<script>
+    let serviceCur ={}
+
+    const header = {
+        headers:{
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-CSRFToken' : '{{csrf_token}}'
+        }
+    }
+
+    let left_display = true
+    let right_display = true
+
+    $(document).ready(function(){
+
+        $("#toggle-rt").click(function(){
+            if (right_display){
+                $(".right-tooth").css('display','none')
+                this.style.backgroundColor = 'var(--light)'
+                this.innerHTML = 'see right'
+                right_display = false
+            } else {
+                $(".right-tooth").css('display','table-cell')
+                this.style.backgroundColor = 'white'
+                this.innerHTML = 'hide right'
+                right_display = true
+            }
+            
+        })
+
+        $("#toggle-lt").click(function(){
+            if (left_display){
+                $(".left-tooth").css('display','none')
+                this.style.backgroundColor = 'var(--light)'
+                this.innerHTML = 'see left'
+                left_display = false
+            } else {
+                $(".left-tooth").css('display','table-cell')
+                this.style.backgroundColor = 'white'
+                this.innerHTML = 'hide left'
+                left_display = true
+            }
+            
+        })
+
+
+        $(".teeth-select").on('change',function(){
+            let data ={
+                [this.name]:this.value
+            }
+            axios.put("/api/odont/{{context.patient.uuid}}/",data,header)
+            event.preventDefault();
+            
+        });
+
+        $("#service-search-btn").click(function(e) {
+            let code = $("#id_code").val()
+            let name = $("#id_name").val()
+            
+            if (code != '' || name!= ''){
+
+                if(Object.keys(serviceCur).length != 0){
+                    $(`#${serviceCur.serviceId}`).css('color','#525f7f')
+                    serviceCur = {}
+                }
+                
+                axios.get(`/api/service/?code=${code}&name=${name}`,header )
+                .then((res)=>{
+                    if (res.status == 200){
+                        
+                        $("#service-content-window").text(null)
+                        res.data.map((service, index)=>{
+                            document.querySelector("#service-content-window").innerHTML += `
+                            <span 
+                            id="service-content-${service.uuid}" 
+                            class="d-block p-2 bg-secondary mt-1 mb-1 rounded service-content"
+                            style="cursor:pointer;"
+                            >
+                            ${service.code} | ${service.name} | ${service.listPrice.toLocaleString()}
+                            </span>`
+                            
+                        })
+                }
+            })
+            }
+            e.preventDefault()
+        })
+
+
+        $("#service-container").on('click',".service-content", function(){
+            if(Object.keys(serviceCur).length != 0){
+                $(`#${serviceCur.serviceId}`).css('color','#525f7f')
+                serviceCur = {}
+            }            
+                serviceCur = { serviceId:this.id }            
+                this.style.color = 'red'; 
+        })
+
+        $("#service-post").on('click',function(event){
+            
+            let data ={
+                treatmentId: "{{ context.treatment.uuid }}",
+                serviceId: serviceCur.serviceId.split("-")[2],
+                teeth:$("#id_teeth").val(),
+                quantity:$("#id_quantity").val()
+            }
+            
+            data.teeth != '' &&
+            axios.post("/api/product/",data,header)
+            .then(
+                (res) => {
+                    if(res.status == 201){
+                        const product = res.data
+                        document.querySelector("#product-list").innerHTML +=
+                            `<tr id="product-row-${product.uuid}">
+                                <td>
+                                    <div class="media align-items-center">
+                                    <div class="media-body">
+                                        <span class="service mb-0 text-sm">${product.teeth}</span>
+                                    </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="media align-items-center">
+                                    <div class="media-body">
+                                        <span class="service mb-0 text-sm">${product.name}</span>
+                                    </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="media align-items-center">
+                                    <div class="media-body">
+                                        <span id="quantity-${product.uuid}" class="quantity mb-0 text-sm">${product.quantity}</span>
+                                    </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="media align-items-center">
+                                    <div class="media-body">
+                                        <span id="price-${product.uuid}" class="quantity mb-0 text-sm">${product.price.toLocaleString()}</span>
+                                    </div>
+                                    </div>
+                                </td>
+                
+                                <td class="actions">
+                                    <a id="product-detele-btn-${product.uuid}" class="btn btn-sm btn-neutral product-delete-btn">delete</a>                                    
+                                </td>
+                            
+                                </tr>`
+                            
+                            let total = parseFloat($("#total-amount").text().replaceAll(',',''))
+                            total += (product.price * product.quantity)
+                            $("#total-amount").text(
+                                total.toLocaleString()
+                            )
+                    }
+                }
+            )
+            event.preventDefault();          
+        })
+
+        $(".product-delete-btn").click(function(e){
+            const uuid = e.target.id.split('-')[3]
+            axios.delete(`/api/product/${uuid}/`, header).then(
+                (res) => {
+                    if (res.status == 204){
+                        let total = parseFloat($("#total-amount").text().replaceAll(',',''))
+                            const price = parseFloat($(`#price-${uuid}`).text().replaceAll(',',''))
+                            const quantity = parseFloat($(`#quantity-${uuid}`).text().replaceAll(',',''))
+                            total -= (price * quantity)
+                        $("#total-amount").text(total.toLocaleString())
+                        $(`#product-row-${uuid}`).remove()
+                    }
+                }
+            )
+        })
+
+
+        
+    })
+</script>
+
+
+
+{% endblock javascripts %}

@@ -1,0 +1,55 @@
+{% extends '_icf001/base.html'%}
+
+{% block title %} form {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- Page content -->
+    <div class="container mt--8 pb-5">
+      <div class="row justify-content-center">
+        <div class="col w-300">
+          <div class="card bg-secondary shadow border-0">
+            <div class="card-header bg-transparent pb-2">
+              <div class="text-center mt-3">
+                <h2>Formulir Protokol Kesehatan Indental Clinic</h2>
+              </div>
+            </div>
+            <div class="card-body px-lg-5 py-lg-5">
+              <div class="text-center mb-4">
+                Demi keselamatan dan kesehatan bersama di masa pandemi COVID-19, Indental Clinic mewajibkan calon pasien untuk terlebih dahulu mengisi screening form yang berkaitan dengan risiko penularan COVID-19 di bawah ini. Mohon dijawab dengan sebenar-benarnya. Terima kasih.
+              </div>
+
+              <form class="container" method="POST">
+
+                {% csrf_token %}
+                {% for f in form %}
+                <div class="row mb-1">
+                {{f.label}}
+                </div>
+                <div class="row mb-2">
+                {{f}}
+                {% if f.errors %}
+                    <div class="alert alert-warning w-100 text-center" role="alert">
+                    Mohon untuk mencentang semua pertanyaan di atas.
+                    </div>
+                {% endif %}
+                  
+                </div>
+                {% endfor %}
+                
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary my-4">Submit</button>
+                </div>
+              </form>
+            </div>
+          </div>
+      
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock content %}

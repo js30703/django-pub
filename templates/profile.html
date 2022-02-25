@@ -1,0 +1,174 @@
+{% extends 'layouts/base.html' %} {% block title %} Profile {% endblock title %}
+{% block content %}
+
+<div class="header pb-6 d-flex align-items-center">
+  <!-- Mask -->
+  <span class="mask opacity-8 bg-primary"></span>
+  <!-- Header container -->
+  <div class="container-fluid d-flex align-items-center">
+    <div class="row">
+      <div class="col-lg-7 col-md-10">
+        <h1 class="display-2 text-white">Hello {{ request.user.name }}</h1>
+        <p class="text-white mt-0 mb-5">
+          This is your profile page. You can see the progress you've made with
+          your work and manage your projects or assigned tasks
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--6">
+  <div class="row">
+    <div class="col-xl-8 order-xl-1">
+      <div class="card">
+        <div class="card-header">
+          <div class="row align-items-center">
+            <div class="col-8">
+              <h3 class="mb-0">Edit profile</h3>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          {{user.type}}
+          <form>
+            <h6 class="heading-small text-muted mb-4">User information</h6>
+            <div class="pl-lg-4">
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-username"
+                      >Username</label
+                    >
+                    <input
+                      type="text"
+                      id="input-username"
+                      class="form-control"
+                      placeholder="Username"
+                      value="{{ request.user.name }}"
+                      readonly
+                    />
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-email"
+                      >Email address</label
+                    >
+                    <input
+                      type="email"
+                      id="input-email"
+                      class="form-control"
+                      placeholder="{{ request.user.email }}"
+                      readonly
+                    />
+                  </div>
+                </div>
+              </div>
+              {% comment %}
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-first-name"
+                      >First name</label
+                    >
+                    <input
+                      type="text"
+                      id="input-first-name"
+                      class="form-control"
+                      placeholder="First name"
+                      value="Lucky"
+                    />
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-last-name"
+                      >Last name</label
+                    >
+                    <input
+                      type="text"
+                      id="input-last-name"
+                      class="form-control"
+                      placeholder="Last name"
+                      value="Jesse"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-center">
+                <a href="#!" class="btn btn-primary w-80">Submit</a>
+              </div>
+              {% endcomment %}
+            </div>
+          </form>
+
+          <h6 class="heading-small text-muted mb-1">PaySlips</h6>
+          <div class="container p-2">
+            {% for payslip in object_list%}
+            <div
+              class="row p-1 border border-light border-right-0 border-left-0"
+            >
+              {{payslip.pay_slip_date|date:'Y-m'}}
+              <a class="ml-auto" href="{{payslip.pdf.url}}" target="_blank">
+                download</a
+              >
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="card-footer py-4">
+          <nav aria-label="...">
+            <ul class="pagination justify-content-end mb-0">
+              {% if pre_page %}
+              <li class="page-item">{% else %}</li>
+
+              <li class="page-item disabled">
+                {% endif %}
+                <a
+                  class="page-link"
+                  href="./?page={{ pre_page }}"
+                  tabindex="-1"
+                >
+                  <i class="fas fa-angle-left"></i>
+                  <span class="sr-only">Previous</span>
+                </a>
+              </li>
+
+              {% for i in total_page %} {% if current_page == i %}
+              <li class="page-item active">
+                <a class="page-link" href="./?page={{i}}"
+                  >{{i}}
+
+                  <span class="sr-only">(current)</span>
+                </a>
+              </li>
+              {% else %}
+              <li class="page-item">
+                {% endif %} {% endfor %} {% if next_page %}
+              </li>
+
+              <li class="page-item">{% else %}</li>
+
+              <li class="page-item disabled">
+                {% endif %}
+
+                <a class="page-link" href="./?page={{ next_page }}">
+                  <i class="fas fa-angle-right"></i>
+                  <span class="sr-only">Next</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% comment %} {% include "includes/footer.html" %} {% endcomment %}
+</div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}{% endblock javascripts %}

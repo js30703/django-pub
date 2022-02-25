@@ -1,0 +1,231 @@
+{% extends 'payment/index.html' %}
+{% load humanize %}
+
+{% block title %} Payment Detail {% endblock title %}
+
+{% block content %}
+
+
+    <div class="header bg-primary pb-6">
+        <div class="container-fluid">
+        <div class="header-body">
+            <div class="row align-items-center py-4">
+            <div class="col-lg-6 col-7">
+                <h6 class="h2 text-white d-inline-block mb-0">Payment</h6>
+                <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                    <li class="breadcrumb-item"><a href=""><i class="fas fa-home"></i></a></li>
+                    <li class="breadcrumb-item" aria-current="page">Payment </li>
+                    <li class="breadcrumb-item" aria-current="page">{{treatment.uuid}}</li>
+                    
+                </ol>
+                </nav>
+            </div>
+            <div class="col-lg-6 col-5 text-right">
+                {% comment %} <a href="./create/" class="btn btn-sm btn-neutral">Create New Patient</a> {% endcomment %}
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+
+    
+    <div class="container-fluid mt--6">
+        <!-- Page content -->
+        <div class="container mt-4 pb-2" >
+        <!-- Table -->
+            
+            <div class="row justify-content-center">
+                <div class="col-lg-10 col-md-10 min-width-0-md">
+                
+                    <div class="card bg-secondary shadow border-0">
+                        <div class="card-header bg-transparent pb-1">
+                        <div class="text-muted text-center mt-2 mb-0">
+                            <p class="display-3"> PAYMENT DETAIL</p>
+                        </div>
+                        </div>
+                        <div class="card-body px-lg-5 py-lg-5"> 
+                         <div class="container">
+                                
+                            <div class="row" style="padding:10px">
+                                    
+                                    
+                                    <div class="col-3">
+                                        <span>DOCTOR</span>
+                                    </div>
+                                    <div class="col">
+                                        <span>{{ user.name}}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="row" style="padding:10px">
+                                    
+                                    <div class="col-3">
+                                        <span>PATIENT</span>
+                                    </div>
+                                    <div class="col">
+                                        <span>{{ patient.name}}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="row" style="padding:10px">
+                                    
+                                    <div class="col-3">
+                                        <span>RESERVRED TIME</span>
+                                    </div>
+                                    <div class="col">
+                                        <span>{{ treatment.treatment_time}}</span>
+                                    </div>
+                                </div>
+                        
+                            </div>                          
+    
+                            <form class="mt-4" method="POST">
+                                
+                                
+                                
+                                
+
+                                {% csrf_token %}
+                                <div class="container">
+                                    <div class="card p-3 row row-cols-1">
+                                        <div class="col align-center p-2">
+                                            <h3 class="m-0"> TOTAL AMOUNT : {{ treatment.total_amount|intcomma}} IDR</h3>
+                                        </div>
+                                        {% if treatment.paid_amount != 0 %}
+                                        <div class="col p-2">
+                                            <h3 class="m-0"> PAID AMOUNT : {{treatment.paid_amount |intcomma}} IDR</h3>
+                                        </div>
+                                        <div class="col p-2">
+                                            <h3 class="m-0"> MONEY LEFT : {{ money_left |intcomma}} IDR</h3>
+                                        </div>
+                                        {% endif %}
+                                        
+                                    </div>
+                                    
+                                    
+
+                                    <div class=" p-3 row row-cols-1">
+                                        <div class="col">
+                                            <h4> AMOUNT FOR TODAY</h3>
+                                            <div class="form-group ">
+                                                <div class="input-group input-group-alternative mb-3">
+                                                    <input id="id_paid_amount_text" class="form-control" type="text">
+                                                </div>
+                                                    {{ form.paid_amount }}
+                                                <div class="form-check form-check-inline" id="pay-once">
+                                                    <input class="form-check-input" type="checkbox" id="pay-once-chb" value="option1">
+                                                    <label class="form-check-label" for="inlineCheckbox1">pay at once</label>
+                                                </div>
+                                                </div>
+                                        
+
+                                            
+                                            {% if form.paid_amount.errors %}
+                                            <div class="alert alert-warning" role="alert">
+                                            {{ form.paid_amount.errors }}
+                                            </div>
+                                            {% endif %}
+                                            
+                                        </div>
+
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <h4> PAY METHOD FOR TODAY</h3>
+                                                <div class="input-group input-group-alternative mb-3">
+                                                    {{ form.pay_method }}
+                                                </div>
+                                                
+                                                </div>
+                                        
+
+                                            
+                                            {% if form.pay_method.errors %}
+                                            <div class="alert alert-warning" role="alert">
+                                            {{ form.pay_method.errors }}
+                                            </div>
+                                            {% endif %}
+                                        </div>
+
+                                        
+
+                                    </div>
+
+                                <div class="text-center mb-100">
+                                <button type="submit" class="btn btn-outline-info btn-block" >confirm payment</button>
+                                </div> 
+                                </div>
+                            </form>
+                              
+                        </div>
+                    </div>
+
+                    
+                     
+                </div>
+            </div>
+            
+       
+       </div>
+    </div>
+    
+    
+            
+                    
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+
+
+<script type="text/javascript">
+    let money_left = {{money_left}};
+
+    $("#id_paid_amount_text").val(money_left);
+    $("#pay-once-chb").attr( "checked", "checked" );  
+
+    $("#pay-once").click((event)=>{
+        chb = document.querySelector("#pay-once-chb")
+        if(!chb.checked){
+           $("#id_paid_amount").val(money_left);
+           $("#id_paid_amount_text").val(money_left.toLocaleString());
+            $("#pay-once-chb").attr( "checked", "checked" );
+        } else{
+            $("#id_paid_amount").val(0)
+            $("#id_paid_amount_text").val('');
+            $("#pay-once-chb").removeAttr("checked");
+        }
+        event.preventDefault()
+    })
+
+    function updateTextView(_obj){
+        var num = getNumber(_obj.val());
+        if(num==0){
+          $("#id_paid_amount").val(num);
+          _obj.val('');
+        }else{
+          $("#id_paid_amount").val(num);
+          _obj.val(num.toLocaleString());
+        }
+        $("#pay-once-chb").removeAttr("checked");
+      }
+    function getNumber(_str){
+    var arr = _str.split('');
+    var out = new Array();
+    for(var cnt=0;cnt<arr.length;cnt++){
+        if(isNaN(arr[cnt])==false){
+        out.push(arr[cnt]);
+        }
+    }
+    return Number(out.join(''));
+    }
+    updateTextView($("#id_paid_amount_text"));
+    $("#pay-once-chb").attr( "checked", "checked" );
+    $("#id_paid_amount_text").on('keyup',function(){
+        updateTextView($(this));
+    });
+      
+</script>
+
+{% endblock javascripts %}

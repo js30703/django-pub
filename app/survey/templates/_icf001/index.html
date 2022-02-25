@@ -1,0 +1,61 @@
+{% extends '_icf001/base.html'%}
+
+{% block title %} form {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- Page content -->
+    <div class="container mt--8 pb-5">
+      <div class="row justify-content-center">
+        <div class="col w-300">
+          <div class="card bg-secondary shadow border-0">
+            <div class="card-header bg-transparent pb-2">
+              <div class="text-center mt-3">
+                <h2>Formulir Pendaftaran Pasien Baru Indental Clinic</h2>
+              </div>
+            </div>
+            <div class="card-body px-lg-5 py-lg-5">
+              <div class="text-center mb-4">
+              
+                Mohon melengkapi formulir dibawah ini untuk mempermudah kunjungan Anda di Indental Clinic. Terima kasih.
+
+              </div>
+
+              <form class="container mt-3" method="POST">
+
+                {% csrf_token %}
+                
+                {% for f in form %}
+                {%if f.label == 'Ga_id' %}
+                  {{f}}
+                {% else %}
+                  <div class="row mb-1">
+                  {{f.label}}
+                  </div>
+                  <div class="row mb-2">
+                  {{f}}
+                  </div>
+                  {% if f.errors %}
+                    <div class="alert alert-warning" role="alert">
+                    {{ f.errors }}
+                    </div>
+                  {% endif %}
+                {% endif %}
+                {% endfor %}
+                
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary my-4">Submit</button>
+                </div>
+              </form>
+            </div>
+          </div>
+      
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock content %}

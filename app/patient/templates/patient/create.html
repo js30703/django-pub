@@ -1,0 +1,112 @@
+{% extends '../layouts/base.html' %}
+
+{% block title %} patient Create {% endblock title %}
+
+{% block content %}
+
+
+    <div class="header bg-primary pb-6">
+        <div class="container-fluid">
+        <div class="header-body">
+            <div class="row align-items-center py-4">
+            <div class="col-lg-6 col-7">
+                <h6 class="h2 text-white d-inline-block mb-0">Patient</h6>
+                <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                    <li class="breadcrumb-item"><a href=""><i class="fas fa-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/patient/">Patient List</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"> Create </li>
+                </ol>
+                </nav>
+            </div>
+            
+            </div>
+        </div>
+        </div>
+    </div>
+
+
+    
+                <div class="container-fluid mt--6">
+                    <!-- Page content -->
+                    <div class="container mt-4 pb-2" >
+                    <!-- Table -->
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8 col-md-10 min-width-0-md">
+                        
+                        <div class="card bg-secondary shadow border-0">
+                            <div class="card-header bg-transparent pb-1">
+                            <div class="text-muted text-center mt-2 mb-1">
+                               <p class="display-3"> New Patient</p>
+                            </div>
+                            </div>
+                            <div class="card-body px-lg-5 py-lg-5">
+                            <div class="text-center text-muted mb-4">
+
+                                {% if msg %}
+                                <small>{{ msg | safe }}</small>
+                                {% endif %}  
+                            
+                            </div>
+                            
+                            {% if not success %}
+
+                                <form method="post">
+
+                                {% csrf_token %}
+                                    
+                                {% for i in form %}
+
+                                {% if i.label == 'Discount reason'%}
+                                 <div class="form-group">   
+                                    <span class="input-group-text">{{i.label}}
+                                    <div class='indental-ul'> {{i}} </div></span>
+                                    
+                                </div>                                    
+                                </div>
+                                {% else %}
+
+                                <div class="form-group">
+                                    <div class="input-group input-group-alternative mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{{i.label}}</span>
+                                    </div>
+                                    {{ i }}
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                {% if i.errors %}
+                                <div class="alert alert-warning" role="alert">
+                                {{ i.errors }}
+                                </div>
+                                {% endif %}
+
+                                {% endfor %}
+                                
+
+                                
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary mt-4" >Submit</button>
+                                </div>
+                                </form>
+
+                            {% endif %}  
+                
+                            </div>
+                        </div>
+
+                        </div>
+                    </div>
+
+                    
+
+                    </div>
+                </div>
+                </div>
+                        
+                    
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}{% endblock javascripts %}

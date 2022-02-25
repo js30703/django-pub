@@ -1,0 +1,182 @@
+{% extends '../layouts/base.html' %}
+
+{% block title %} patient List {% endblock title %}
+
+{% block content %}
+    
+    <div class="header bg-primary pb-6">
+        <div class="container-fluid">
+        <div class="header-body">
+            <div class="row align-items-center py-4">
+            <div class="col-lg-6 col-7">
+                <h6 class="h2 text-white d-inline-block mb-0">Patient</h6>
+                <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                    <li class="breadcrumb-item"><a href=""><i class="fas fa-home"></i></a></li>
+                    <li class="breadcrumb-item" aria-current="page">Patient List</li>
+                    
+                </ol>
+                </nav>
+            </div>
+            <div class="col-lg-6 col-5 text-right">
+                <a href="./create/" class="btn btn-sm btn-neutral">Create New Patient</a>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+
+     <div class="container-fluid mt--6">
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <!-- Card header -->
+          <div class="card-header border-0">
+            <h3 class="mb-0">List</h3>
+          </div>
+          <div class="container">
+          <form method="get">
+          {% csrf_token %}
+            <div class="row">
+              <div class="col-3">
+                 <div class="form-group">
+                  <div class="input-group input-group-alternative mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Name</span>
+                    </div>
+                  {{filter.form.name}}
+                  </div>
+                </div>
+              </div>
+              <div class="col-5">
+                <div class="form-group">
+                  <div class="input-group input-group-alternative mb-3">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text">BIRTH DATE</span>
+                  </div>
+                  {{filter.form.birth_date}}
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-2 text-left">
+                <button  class="btn btn-bm btn-neutral" type='submit'> search</button>  
+              </div>
+
+              </div>
+              
+           
+          </form>
+          </div>
+          <!-- Light table -->
+          <div class="table-responsive">
+            <table class="table align-items-center table-flush">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col" class="sort" data-sort="actions">actions</th>
+                  <th scope="col" class="sort" data-sort="id">PATIENT ID</th>
+                  <th scope="col" class="sort" data-sort="name">NAME</th>
+                  <th scope="col" class="sort" data-sort="gender">Gender</th>
+                  <th scope="col" class="sort" data-sort="birth-date">birth_date</th>
+                  <th scope="col" class="sort" data-sort="mobile">Mobile</th>
+                  
+                </tr>
+              </thead>
+              <tbody class="list">
+                
+             {% for patient in object_list %}
+             
+                <tr>
+                  <td class="actions">
+                    <a href="./{{patient.uuid}}/" class="btn btn-sm btn-neutral">Info</a>
+                    <a href="../treatment/create/{{patient.uuid}}/" class="btn btn-sm btn-neutral">reserve</a>
+                  </td>
+                  <td>
+                    <span class="id mb-0 text-sm">{{patient.uuid}}</span>
+                  </td>
+                  <td>
+                  <span class="name mb-0 text-sm">{{patient.name}}</span>
+                  </td>
+                  <td>
+                    
+                      <span class="gender">{{patient.gender}}</span>
+                   
+                  </td>
+                  <td>
+                    <div class="birth-date">
+                      {{patient.birth_date}}
+                    </div>
+                  </td>
+                  <td>
+                    <div class="mobile">
+                      0{{patient.mobile}}
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <!-- Card footer -->
+          <div class="card-footer py-4">
+            <nav aria-label="...">
+              <ul class="pagination justify-content-end mb-0">
+                
+                {% if pre_page %}
+                <li class="page-item">
+                {% else %}
+                <li class="page-item disabled">
+                {% endif %}
+                  <a class="page-link" href="./?page={{ pre_page }}" tabindex="-1">
+                    <i class="fas fa-angle-left"></i>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                </li>
+
+
+
+                {% for i in total_page %}
+
+                {% if current_page == i %}
+                <li class="page-item active">
+                  <a class="page-link" href="./?page={{i}}">{{i}}
+                  
+                    <span class="sr-only">(current)</span>
+
+                                    
+                  </a>
+                </li>
+                {% else %}
+                <li class="page-item">
+                {% endif %}
+                  
+                {% endfor %}
+                
+
+                {% if next_page %}
+                <li class="page-item">
+                {% else %}
+                <li class="page-item disabled">
+                
+                {% endif %}
+
+                  <a class="page-link" href="./?page={{ next_page }}">
+                    <i class="fas fa-angle-right"></i>
+                    <span class="sr-only">Next</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+{% endblock content %}
+
+
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}{% endblock javascripts %}
